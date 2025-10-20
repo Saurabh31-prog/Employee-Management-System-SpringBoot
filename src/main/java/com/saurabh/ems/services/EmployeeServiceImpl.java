@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.saurabh.ems.Repository.EmployeeRepository;
 import com.saurabh.ems.entity.Employee;
+import com.saurabh.ems.repository.EmployeeRepository;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 	

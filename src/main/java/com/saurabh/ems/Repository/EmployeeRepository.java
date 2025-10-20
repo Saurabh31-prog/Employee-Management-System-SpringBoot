@@ -1,4 +1,4 @@
-package com.saurabh.ems.Repository;
+package com.saurabh.ems.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
