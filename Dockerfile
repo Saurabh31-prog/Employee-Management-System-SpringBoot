@@ -11,24 +11,20 @@ RUN mvn dependency:go-offline
 # 2. Copy the source code
 COPY src ./src
 
-# 3. Build the project (skip tests to save time)
+# 3. Build the project (skip tests)
 RUN mvn clean package -DskipTests
 
 # ----------------------------
-# Stage 2: Create lightweight runtime image
+# Stage 2: Lightweight runtime image
 # ----------------------------
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-# 4. Copy the Spring Boot executable JAR
-# Use wildcard to match any repackaged JAR (handles SNAPSHOT or versioned JARs)
-COPY --from=build /app/target/*SNAPSHOT.jar app.jar
+# 4. Copy the correct Spring Boot executable JAR
+COPY --from=build /app/target/EMP-backend.jar app.jar
 
-# 5. Verify the JAR (optional, helps debug in future)
-RUN echo "JAR contents:" && jar tf app.jar | head -n 20
-
-# 6. Expose the application port
+# 5. Expose port
 EXPOSE 8080
 
-# 7. Run the app
+# 6. Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
