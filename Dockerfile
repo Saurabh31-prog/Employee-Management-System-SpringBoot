@@ -15,7 +15,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy JAR from the build stage
-COPY --from=build /app/target/EMP-backend.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Expose port and run
 EXPOSE 8080
