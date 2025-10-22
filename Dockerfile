@@ -1,24 +1,34 @@
-# Stage 1: Build the app
+# ----------------------------
+# Stage 1: Build the Spring Boot app
+# ----------------------------
 FROM maven:3.9.3-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy pom.xml first to cache dependencies
+# 1. Copy pom.xml first to cache dependencies
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copy source code
+# 2. Copy the source code
 COPY src ./src
 
-# Build the Spring Boot app (skip tests to save time)
+# 3. Build the project (skip tests to save time)
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run the app
+# ----------------------------
+# Stage 2: Create lightweight runtime image
+# ----------------------------
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-# Copy the Spring Boot fat JAR from build stage
-COPY --from=build /app/target/Employe_Management-0.0.1-SNAPSHOT.jar app.jar
+# 4. Copy the Spring Boot executable JAR
+# Use wildcard to match any repackaged JAR (handles SNAPSHOT or versioned JARs)
+COPY --from=build /app/target/*SNAPSHOT.jar app.jar
 
-# Expose port and run
+# 5. Verify the JAR (optional, helps debug in future)
+RUN echo "JAR contents:" && jar tf app.jar | head -n 20
+
+# 6. Expose the application port
 EXPOSE 8080
+
+# 7. Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
