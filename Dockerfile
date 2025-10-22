@@ -17,7 +17,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the Spring Boot fat JAR from build stage
-COPY --from=build /app/target/*-boot.jar app.jar
+COPY --from=build /app/target/Employe_Management-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port and run
 EXPOSE 8080
